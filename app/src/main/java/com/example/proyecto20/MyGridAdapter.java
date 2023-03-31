@@ -3,7 +3,6 @@ package com.example.proyecto20;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.metrics.Event;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,10 @@ import java.util.Locale;
 public class MyGridAdapter extends ArrayAdapter {
     List<Date> dates;
     Calendar currentDate;
-    List<Event> events;
+    List<Events> events;
     LayoutInflater inflater;
 
-    public MyGridAdapter(@Nullable Context context, List<Date> dates, Calendar currentDate, List<Event> events){
+    public MyGridAdapter(@Nullable Context context, List<Date> dates, Calendar currentDate, List<Events> events){
         super(context,R.layout.single_cell_layout);
         this.dates=dates;
         this.currentDate=currentDate;
@@ -77,7 +76,7 @@ public class MyGridAdapter extends ArrayAdapter {
         return view;
 
     }
-    private void ConvertirStringToDate(String eventDate){
+    private Date ConvertirStringToDate(String eventDate){
         SimpleDateFormat format= new SimpleDateFormat("yyyy-MM-ddd", Locale.ENGLISH);
         Date date= null;
         try{

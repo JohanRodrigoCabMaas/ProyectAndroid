@@ -1,11 +1,11 @@
 package com.example.proyecto20;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.metrics.Event;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.os.Handler;
 
 import androidx.annotation.Nullable;
 
@@ -45,7 +44,7 @@ public class CustomCalendar extends LinearLayout {
     MyGridAdapter myGridAdapter;
     AlertDialog alertDialog;
     List<Date> dates= new ArrayList<>();
-    List<Event> eventsList= new ArrayList<Event>();
+    List<Events> eventsList= new ArrayList<Events>();
     DBOpenHelper dbOpenHelper;
     public CustomCalendar(Context context){
         super(context);
@@ -118,12 +117,17 @@ public class CustomCalendar extends LinearLayout {
                 alertDialog.show();
             }
         });
-        gridView.setOnLongClickListener(new AdapterView.OnItemLogClickListener()){
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-                    public boolean OnItemLongClick(AdapterView<?> parent,View view, int position, long id){
-                alert
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Realiza la acción que desees cuando se detecta una pulsación larga
+                Toast.makeText(context, "Elemento " + i + " pulsado largamente", Toast.LENGTH_SHORT).show();
+
+                // Devuelve true para consumir la pulsación larga y evitar que se propague al siguiente listener
+                return true;
             }
-        }
+        });
+
 
     }
 
@@ -170,14 +174,14 @@ public class CustomCalendar extends LinearLayout {
         eventsList.clear();
         dbOpenHelper=new DBOpenHelper(context);
         SQLiteDatabase database=dbOpenHelper.getReadableDatabase();
-        Cursor cursor=dbOpenHelper.ReadEventsperMonth(Month,year,database);
+        Cursor cursor = dbOpenHelper.ReadEventsperMonth(Month,year,database);
         while(cursor.moveToNext()){
-            String event = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT));
-            String time = cursor.getString(cursor.getColumnIndex(DBStructure.TIME));
-            String date = cursor.getString(cursor.getColumnIndex(DBStructure.DATE));
-            String month = cursor.getString(cursor.getColumnIndex(DBStructure.MONTH));
-            String Year = cursor.getString(cursor.getColumnIndex(DBStructure.YEAR));
-            Event events = new Event(event,time,date,month,Year);
+            @SuppressLint("Range") String event = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT));
+            @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex(DBStructure.TIME));
+            @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DBStructure.DATE));
+            @SuppressLint("Range") String month = cursor.getString(cursor.getColumnIndex(DBStructure.MONTH));
+            @SuppressLint("Range") String Year = cursor.getString(cursor.getColumnIndex(DBStructure.YEAR));
+            Events events = new Events(event,time,date,month,Year);
             eventsList.add(events);
         }
         cursor.close();
